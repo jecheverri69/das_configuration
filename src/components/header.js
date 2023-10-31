@@ -7,7 +7,6 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -19,9 +18,14 @@ import ListItemText from "@mui/material/ListItemText";
 import CreateNewFolderTwoToneIcon from "@mui/icons-material/CreateNewFolderTwoTone";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { useTranslation } from "react-i18next";
+import { Divider } from "@mui/material";
+import LanguageSelector from "./languageSelector";
 import { useNavigate } from "react-router-dom";
+
 const drawerWidth = 240;
 const { ipcRenderer } = window.require('electron');
+
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -48,7 +52,7 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
+  // necessary for content to be below the app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -88,26 +92,28 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Header() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
   const views = [
     {
-      name: "New Project",
+      name: t("newProject"),
       icon: <CreateNewFolderTwoToneIcon />,
       action: () => {
         navigate("/");
       },
     },
     {
-      name: "Settings",
+      name: t("settings"),
       icon: <SettingsIcon />,
       action: () => {
         navigate("/initial");
       },
     },
     {
-      name: "Exit",
+      name: t("exit"),
       icon: <ExitToAppIcon />,
       action: () => {
         ipcRenderer.send("close");
@@ -126,7 +132,11 @@ function Header() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ mb: "5%" }}>
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{ mb: "5%", backgroundColor: "black" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -141,8 +151,9 @@ function Header() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            {t("dasVisualization")}
           </Typography>
+          <LanguageSelector />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
